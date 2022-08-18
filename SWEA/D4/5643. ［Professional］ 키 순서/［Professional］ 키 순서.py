@@ -17,8 +17,11 @@ for t in range(1, T+1):
             # 현재 학생 기준으로 더 크고, 아직 조사하지 않은 학생 번호 리스트
             search = [x for x in range(1, N+1) if link[i][x] and not visited[x]]
             if search:
+                # 순차적으로 조사하기
                 for j in search:
                     visited[j] = 1  # 방문 처리
+                    # 지금 조사하는 학생보다 또 더 큰 학생이 있다면
+                    # 현재 기준 학생의 인접 행렬에 정보를 갱신해줌
                     for k in [y for y in range(1, N+1) if link[j][y] and not visited[y]]:
                         link[i][k] = 1
             # 조사할 학생이 없다면 종료
