@@ -18,13 +18,26 @@ dp[i][j] 값은 가방 무게 제한이 j kg일때 처음 i개의 물건 중 담
 최종 정답은 무게 제한이 K일 때 처음 N개의 물건 중 담을 수 있는 최대 가치, 즉 dp[N][K]가 된다. 
 '''
 
+'''
+유명한 0-1 Knapsack 문제라고 한다.
+
+기존의 (N+1) * (K+1) 사이즈의 DP 배열을 1 * (K+1) 사이즈로 압축한 풀이이다.
+N개의 행(0번 행 제외)에 나누어 저장하던 것을 하나의 행에 저장하고, 그 행을 N번 갱신하는 형식이다.
+dp[i] = 무게 제한이 i kg 일 때, 현재까지의 물건 중에 담을 수 있는 최대 가치이다.
+
+dp를 모두 채우고 그 다음 번 물건에 대해 다시 dp를 갱신하게 되는데,
+기존에 저장된 dp[i] 값은 무게 제한이 i 일 때 바로 이전 물건까지 고려한 경우의 최대 가치이다. 
+
+따라서 
+    1. 기존 dp[i] 값
+    2. (이번 물건의 가치 v) + (이번 물건을 담고 남은 무게에서 담을 수 있는 최대 가치인 dp[i-w])
+위의 두 개의 값을 비교해서 더 큰 값을 dp[i] 값으로 갱신하게 된다.
+'''
+
 N, K = map(int, input().split())
-things = [[0, 0]] + [list(map(int, input().split())) for _ in range(N)]
-dp = [[0] * (K+1) for _ in range(N+1)]
-for j in range(1, K+1):
-    for i in range(1, N+1):
-        if things[i][0] > j:
-            dp[i][j] = dp[i-1][j]
-        else:
-            dp[i][j] = max(dp[i-1][j-things[i][0]] + things[i][1], dp[i-1][j])
-print(dp[N][K])
+dp = [0] * (K+1)
+for _ in range(N):
+    w, v = map(int, input().split())
+    for i in range(K, w-1, -1):
+        dp[i] = max(dp[i], v + dp[i-w])
+print(dp[K])
