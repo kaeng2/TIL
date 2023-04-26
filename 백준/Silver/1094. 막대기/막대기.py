@@ -4,12 +4,8 @@ input = sys.stdin.readline
 # 입력
 X = int(input())
 
-stick = 64
-ans = 0
-while X > 0:
-    if stick > X:
-        stick //= 2
-    else:
-        X -= stick
-        ans += 1
-print(ans)
+def bit_count(n):
+    if n == 0:  return 0
+    return n % 2 + bit_count(n // 2)
+
+print(bit_count(X))
